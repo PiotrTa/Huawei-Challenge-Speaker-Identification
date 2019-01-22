@@ -21,5 +21,5 @@ If you want to play around with the code:
   - Create two folders: one for the speakers to be enrolled, and the other one for queries and place wave files with 16kHz sampling rate.
   - Open run_identification.ipynb and adjust the folder paths.
  
- You can also try visualizing the embeddings for your dataset. Take a look into speaker embedding visualization ipynb
+ You can also try visualizing the embeddings for your dataset. Take a look into embedding_visualization.ipynb
 
