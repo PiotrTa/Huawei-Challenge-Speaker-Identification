@@ -35,5 +35,5 @@ Data preprocessing:
 
 All audio data was converted to wave format and resampled to 16kHz using ffmpeg. Speech activity detection was done offline before training. For non-speech segment removal, a pre-trained support vector machine classifier is used. Speech removal reduced the overall size of the data set from 67.4GB to 55GB. 
 
-Some code from:
+Some code for the pytorch network from:
 https://github.com/pyannote/pyannote-audio
