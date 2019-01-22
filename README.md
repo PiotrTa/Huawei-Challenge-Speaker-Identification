@@ -23,3 +23,17 @@ If you want to play around with the code:
  
  You can also try visualizing the embeddings for your dataset. Take a look into embedding_visualization.ipynb
 
+Models:
+- large_model.pt (pytorch):
+  Two bi-LSTM layers (2x512 hidden dimension) plus two fc-layers on top with tanh activation at the end.
+- best_model.pb (tensorflow)
+  static LSTM (1x128 hidden dimension) plus two fc-layers with tanh activation. Can be run on Huawei Kirin 970.
+  
+Training data included LibriSpeech subsets: “clean-train-100” and “clean-train-360”, both having together 1105 English speakers, Clarin Polish data set with 552 speakers, and Huawei data set containing 165 English speakers. 
+
+Data preprocessing:
+
+All audio data was converted to wave format and resampled to 16kHz using ffmpeg. Speech activity detection was done offline before training. For non-speech segment removal, a pre-trained support vector machine classifier is used. Speech removal reduced the overall size of the data set from 67.4GB to 55GB. 
+
+Some code from:
+https://github.com/pyannote/pyannote-audio
