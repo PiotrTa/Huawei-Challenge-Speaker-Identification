@@ -7,7 +7,7 @@ from scratch in tensorflow.
 
 - Models uploaded
 - Notebooks for speech utterance embedding visualization added
-- Notebook for speaker identification 
+- Notebook for speaker identification added
 
 
 To do:
