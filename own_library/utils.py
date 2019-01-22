@@ -52,9 +52,8 @@ class utils():
             with tf.Session(graph=graph) as sess:
 
                 for i in range(batch.shape[0]):
-                    #batch_swap = np.swapaxes(batch[i], 1, 0)
                     embedding_temp = sess.run(y,
-                                              feed_dict={x_input: batch[i],#, axis=0,
+                                              feed_dict={x_input: batch[i],
                                                          x_hid_state: np.zeros((1, 128))})
                     if i == 0:
                         embedding = embedding_temp
