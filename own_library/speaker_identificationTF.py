@@ -31,7 +31,7 @@ class SpeakerIdentificationTf(object):
         :return:
         """
         for i, speaker in enumerate(sorted(os.listdir(self.enrollment_folder))):
-            print("Enrolling speaker: ", speaker)
+            #print("Enrolling speaker: ", speaker)
             audio = AudioSegment.from_wav(os.path.join(self.enrollment_folder, speaker))
             assert audio.duration_seconds > seq_len, "Audio file {} too short. Should be longer than {}"\
                 .format(audio, seq_len)
@@ -48,7 +48,7 @@ class SpeakerIdentificationTf(object):
         '''
 
         for speaker in self.all_speakers:
-            print("Computing query embeddings for speaker: ", speaker[0])
+            #print("Computing query embeddings for speaker: ", speaker[0])
             audio = AudioSegment.from_wav(speaker[0])
             assert audio.duration_seconds > seq_len, "Audio file {} too short. Should be longer than {}".format(audio, seq_len)
             feature_batch = utils.batch_builder(audio, model=self.model, seq_len=seq_len,
@@ -60,6 +60,7 @@ class SpeakerIdentificationTf(object):
     def compute_smallest_distances(self):
         for i, query in enumerate(self.query_embeddings):
             highest_similarity = -1e9
+            predicted_speaker = None
             for j, enrolled in enumerate(self.enrollment_model):
 
                 query_vec = query["Embedding"].reshape(1, -1)
@@ -68,10 +69,23 @@ class SpeakerIdentificationTf(object):
                 similarity = cosine_similarity(query_vec, enrolled_vec)
                 if similarity > highest_similarity:
                     highest_similarity = similarity
+                    predicted_speaker = enrolled["Speaker"]
             self.smallest_distances.append({"Speaker": query["Speaker"],
-                                            "Distance": round(float(np.squeeze(highest_similarity)), 4)})
+                                            "Distance": round(float(np.squeeze(highest_similarity)), 4),
+                                            "Predicted_speaker": predicted_speaker})
+            '''
             print("Final smallest distance", {"Speaker": query["Speaker"],
-                                              "Distance": round(float(np.squeeze(highest_similarity)), 4)})
+                                              "Distance": round(float(np.squeeze(highest_similarity)), 4),
+                                              "Predicted_speaker": predicted_speaker})
+            '''
+    def evaluate_identification(self):
+        y_true = []
+        y_pred = []
+        for speaker in self.smallest_distances:
+            y_true.append(speaker["Speaker"].split("/")[-1].split(".")[0])
+            y_pred.append((speaker["Predicted_speaker"].split("/")[-1]).split(".")[0])
+        accuracy = accuracy_score(y_true, y_pred)
+        return accuracy
 
     def evaluate(self, thresholds,):
         # TODO: Finish evaluation

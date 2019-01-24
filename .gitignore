@@ -1,3 +1,4 @@
 *.wav
 .idea
 .ipynb_checkpoints
+*.pkl
